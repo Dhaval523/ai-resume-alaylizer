@@ -6,7 +6,13 @@ import { generateUUID } from '~/lib/utils';
 import {AIResponseFormat, prepareInstructions} from '../../constants';
 import FileUploader from '~/components/fileUploader';
 import Navabar from '~/components/navabar';
-
+import type {Route} from "../../.react-router/types/app/routes/+types/home";
+export function meta({}: Route.MetaArgs) {
+    return [
+        { title: "Resumind | Upload" },
+        { name: "description", content: "Upload resume" },
+    ];
+}
 const Upload = () => {
     const { auth, isLoading, fs, ai, kv } = usePuterStore();
     const navigate = useNavigate();
@@ -91,8 +97,9 @@ const Upload = () => {
             data.feedback = JSON.parse(feedbackText);
             await kv.set(`resume:${uuid}`, JSON.stringify(data));
             setStatusText('Analysis complete, redirecting...');
-            console.log( data)
-            // navigate(`/resume/${uuid}`);
+            navigate(`/resume/${uuid}`);
+
+
         } catch (error) {
             setStatusText('Error: An unexpected error occurred');
             console.error('Analysis error:', error);
